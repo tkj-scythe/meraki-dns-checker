@@ -17,7 +17,7 @@ if __name__ == "__main__":
         #print(f"Testing with {server} DNS Servers...")
         my_resolver.nameservers = DNS_SERVERS[server]
 
-        result = my_resolver.resolve(URL, 'A')
+        ip_addresses = my_resolver.resolve(URL, 'A')
         #print('Result is', end=' ')
         #for ipval in result:
         #    print(ipval.to_text(), end=' ')
@@ -25,18 +25,18 @@ if __name__ == "__main__":
         #print('')
 
         #print('Testing reverse lookups...')
-        for ipval in result:
+        for ip_address in ip_addresses:
             #print (f"Trying: {ipval}.", end=' ')
             try:
-                result = my_resolver.resolve_address(ipval.to_text())[0].to_text()[:-1]
+                reverse_lookup = my_resolver.resolve_address(ip_address.to_text())[0].to_text()[:-1]
                 #print (f"Result is {result}")
-                if result != URL:
+                if reverse_lookup != URL:
                     #print(f"URL Not matching: {result} =/= {URL}")
-                    print(f"{server} DNS, {ipval}: FAIL - URL Mismatch")
+                    print(f"{server} DNS, {ip_address}: FAIL - URL Mismatch")
                 else:
-                    print(f"{server} DNS: {ipval}: PASS")
+                    print(f"{server} DNS: {ip_address}: PASS")
             except:
-                print(f"{server} DNS: {ipval}: FAIL - exception occured")
+                print(f"{server} DNS: {ip_address}: FAIL - exception occured")
 
 
 
