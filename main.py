@@ -26,9 +26,10 @@ if __name__ == "__main__":
 
         print('Testing reverse lookups...')
         for ipval in result:
+            print (f"Trying: {ipval}")
             try:
                 if my_resolver.resolve_address(ipval.to_text())[0] != 'URL':
-                    print('URL Not matching: ' + my_resolver.resolve_address(ipval.to_text())[0])
+                    print(f"URL Not matching: {my_resolver.resolve_address(ipval.to_text())[0]}")
             except:
                 print("DNS Reverse Lookup Exception Occured")
 
