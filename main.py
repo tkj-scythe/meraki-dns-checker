@@ -1,5 +1,5 @@
-import dns.resolver
-URL = 'meraki.com'
+import dns.resolver, re
+URL = "meraki.com"
 
 
 DNS_SERVERS = {
@@ -14,24 +14,29 @@ if __name__ == "__main__":
 
     for server in DNS_SERVERS:
 
-        print(f"Testing with {server} DNS Servers...")
+        #print(f"Testing with {server} DNS Servers...")
         my_resolver.nameservers = DNS_SERVERS[server]
 
         result = my_resolver.resolve(URL, 'A')
-        print('Result is', end=' ')
-        for ipval in result:
-            print(ipval.to_text(), end=' ')
+        #print('Result is', end=' ')
+        #for ipval in result:
+        #    print(ipval.to_text(), end=' ')
 
-        print('')
+        #print('')
 
-        print('Testing reverse lookups...')
+        #print('Testing reverse lookups...')
         for ipval in result:
-            print (f"Trying: {ipval}")
+            #print (f"Trying: {ipval}.", end=' ')
             try:
-                if my_resolver.resolve_address(ipval.to_text())[0] != 'URL':
-                    print(f"URL Not matching: {my_resolver.resolve_address(ipval.to_text())[0]}")
+                result = my_resolver.resolve_address(ipval.to_text())[0].to_text()[:-1]
+                #print (f"Result is {result}")
+                if result != URL:
+                    #print(f"URL Not matching: {result} =/= {URL}")
+                    print(f"{server} DNS, {ipval}: FAIL - URL Mismatch")
+                else:
+                    print(f"{server} DNS: {ipval}: PASS")
             except:
-                print("DNS Reverse Lookup Exception Occured")
+                print(f"{server} DNS: {ipval}: FAIL - exception occured")
 
 
 
