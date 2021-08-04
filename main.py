@@ -20,7 +20,7 @@ DNS_SERVERS = {
 def getWanInterface(external_ip, dashboard):
     organizations = dashboard.organizations.getOrganizations()
     for org in organizations:
-        #print(f'--Analyzing organization {org["name"]}:')
+        print(f'--Analyzing organization {org["name"]}:')
         org_id = org['id']
         try:
             appliances = dashboard.appliance.getOrganizationApplianceUplinkStatuses(org_id)
@@ -35,23 +35,26 @@ def getWanInterface(external_ip, dashboard):
             continue
 
         else:
+            
             if appliances:
                 for appliance in appliances:
-                    #print(f' \--Analyzing appliance {appliance["serial"]}:')
+                    
+                    print(f' \--Analyzing appliance {appliance["serial"]}:')
                     interfaces = appliance['uplinks']
                     for interface in interfaces:
-                        #print(f' | \-Analyzing interface {interface["interface"]} - IP address: {interface["publicIp"]}:')
+                        
+                        print(f' | \-Analyzing interface {interface["interface"]} - IP address: {interface["publicIp"]}:')
                         if external_ip == interface["publicIp"]:
                             #print(f' |  \- Matches interface {interface["interface"]} - IP address: {interface["publicIp"]}:')
                             print(f'Network found, Org: {org["name"]}, Appliance: {appliance["serial"]}, Interface: {interface["interface"]}')
                             return (org, appliance, interface)
-        print(f'Failed to find interface')
-        return None
+    print(f'Failed to find interface')
+    return None
 
 
 if __name__ == "__main__":
 
-    #Get external IP address
+    #Get external IP address of current device
     external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
     print(f'External IP address is {external_ip}:')
 
